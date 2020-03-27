@@ -1,10 +1,10 @@
-
 <template>
     <Layout class-prefix="layout">
-        <NumberPad/>
-        <Types/>
-        <Notes/>
-        <Tags :data-source.sync="tags" />
+        {{record}}
+        <NumberPad @update:value="abc"/>
+        <Types :value.sync="record.type"/>
+        <Notes @update:value="qqq"/>
+        <Tags :data-source.sync="tags" @update:value="yyy"/>
     </Layout>
 </template>
 
@@ -15,12 +15,34 @@
     import Types from '@/components/Money/Types.vue';
     import Notes from '@/components/Money/Notes.vue';
     import Tags from '@/components/Money/Tags.vue';
+
+    type Record = {
+        tags: string[];
+        notes: string;
+        type: string;
+        amount: number;
+    }
     @Component({
         components: {Tags, Notes, Types, NumberPad}
     })
 
     export default class Money extends Vue {
-    tags= ['衣', '食', '住', '行', '彩票'] ;
+        tags = ['衣', '食', '住', '行', '彩票'];
+        record: Record = {
+            tags: [], notes: '', type: '-', amount: 0
+        };
+
+        yyy(value: string[]) {
+            this.record.tags = value;
+        }
+
+        qqq(value: string) {
+            this.record.notes = value;
+        }
+
+        abc(value: string) {
+            this.record.amount = parseFloat(value);
+        }
     }
 </script>
 
