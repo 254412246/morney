@@ -8,7 +8,7 @@
                 :key="tag"
                 :class="{selected: selectedTags.indexOf(tag)>=0}"
                 @click="toggle(tag)">
-                {{tag}}
+                {{tag.name}}
             </li>
         </ul>
     </div>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {Component,Prop} from 'vue-property-decorator';
+    import {Component, Prop} from 'vue-property-decorator';
 
     @Component
 

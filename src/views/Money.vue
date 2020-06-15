@@ -1,13 +1,14 @@
 <template>
     <Layout class-prefix="layout">
-        <NumberPad @update:value="abc" @submit="saveRecord"/>
+        <NumberPad @submit="
+        saveRecord" @update:value="abc"/>
         <Types :value.sync="record.type"/>
         <div class="notes">
             <FormItem field-name="备注"
                       placeholder="请输入备注"
-                      @update:value="qqq"/>
+                      @update:value="onUpdateNotes"/>
         </div>
-        <Tags :data-source.sync="tags" @update:value="yyy"/>
+        <Tags :data-source.sync="tags" @update:value="onUpdateTags"/>
     </Layout>
 </template>
 
@@ -36,12 +37,15 @@
             tags: [], notes: '', type: '-', amount: 0
         };
 
+        saveRecord() {
+            recordListModel.create(this.record);
+        }
 
-        yyy(value: string[]) {
+        onUpdateTags(value: string[]) {
             this.record.tags = value;
         }
 
-        qqq(value: string) {
+        onUpdateNotes(value: string) {
             this.record.notes = value;
         }
 
@@ -49,15 +53,9 @@
             this.record.amount = parseFloat(value);
         }
 
-        saveRecord() {
-            const record22: RecordItem = recordListModel.clone(this.record);
-            record22.createdAt = new Date();
-            this.recordList.push(record22);
-        }
-
         @Watch('recordList')
         onRecordListChange() {
-            recordListModel.save(this.recordList);
+            recordListModel.save();
         }
 
     }
@@ -68,7 +66,8 @@
         display: flex;
         flex-direction: column-reverse;
     }
-    .notes{
+
+    .notes {
         padding: 12px 0;
     }
 </style>
