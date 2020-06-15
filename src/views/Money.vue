@@ -7,7 +7,6 @@
                       placeholder="请输入备注"
                       @update:value="qqq"/>
         </div>
-
         <Tags :data-source.sync="tags" @update:value="yyy"/>
     </Layout>
 </template>
