@@ -8,7 +8,7 @@ const recordListModel = {
         record2.createdAt = new Date();
         this.data.push(record2);
     },
-    fetch() {
+    fetchTags() {
         return JSON.parse(window.localStorage.getItem(localStorageKeyName) || '[]') as RecordItem[];
     },
     save() {

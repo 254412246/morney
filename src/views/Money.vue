@@ -8,7 +8,7 @@
                       placeholder="请输入备注"
                       @update:value="onUpdateNotes"/>
         </div>
-        <Tags :data-source.sync="tags" @update:value="onUpdateTags"/>
+        <Tags/>
     </Layout>
 </template>
 
@@ -18,32 +18,30 @@
     import Types from '@/components/Money/Types.vue';
     import FormItem from '@/components/Money/Formltem.vue';
     import Tags from '@/components/Money/Tags.vue';
-    import {Component, Watch} from 'vue-property-decorator';
-    import recordListModel from '@/models/recordListModel';
-    import tagListModel from '@/models/tagListModel';
+    import {Component} from 'vue-property-decorator';
 
-    const recordList = recordListModel.fetch();
-    const tagList = tagListModel.fetch();
 
     @Component({
-        components: {Tags, FormItem, Types, NumberPad}
+        components: {Tags, FormItem, Types, NumberPad},
+        computed:{
+            recordList() {
+                return this.$store.state.recordList;
+            }
+        }
     })
 
     export default class Money extends Vue {
-        tags = tagList;
 
-        recordList: RecordItem[] = recordList;
         record: RecordItem = {
             tags: [], notes: '', type: '-', amount: 0
         };
-
+        created(){
+            this.$store.commit('fetchRecords')
+        }
         saveRecord() {
-            recordListModel.create(this.record);
+           this.$store.commit( 'createRecord',this.record)
         }
 
-        onUpdateTags(value: string[]) {
-            this.record.tags = value;
-        }
 
         onUpdateNotes(value: string) {
             this.record.notes = value;
@@ -53,10 +51,6 @@
             this.record.amount = parseFloat(value);
         }
 
-        @Watch('recordList')
-        onRecordListChange() {
-            recordListModel.save();
-        }
 
     }
 </script>
