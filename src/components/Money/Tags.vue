@@ -19,28 +19,28 @@
     import {Component} from 'vue-property-decorator';
     import {mixins} from 'vue-class-component';
     import TagHelper from '@/mixins/TagHelper';
-    @Component({
-        computed: {
-            tagList() {
-                return this.$store.state.tagList;
-            }
-        }
-    })
+
+    @Component
 
     export default class Tags extends mixins(TagHelper) {
+        get tagList() {
+            return this.$store.state.tagList;
+        }
 
-        selectedTags: string[]=[];
+        selectedTags: string[] = [];
+
         created() {
             this.$store.commit('fetchTags');
         }
-        toggle(tag: string){
-            const  index=this.selectedTags.indexOf(tag);
-            if(index>=0){
-                this.selectedTags.splice(index,1)
-            }else {
-                this.selectedTags.push(tag)
+
+        toggle(tag: string) {
+            const index = this.selectedTags.indexOf(tag);
+            if (index >= 0) {
+                this.selectedTags.splice(index, 1);
+            } else {
+                this.selectedTags.push(tag);
             }
-            this.$emit('update:value', this.selectedTags)
+            this.$emit('update:value', this.selectedTags);
         }
     }
 </script>
@@ -53,11 +53,13 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column-reverse;
+
         > .current {
             display: flex;
             flex-wrap: wrap;
+
             > li {
-                $bg:#D9D9D9;
+                $bg: #D9D9D9;
                 background: $bg;
                 $h: 24px;
                 height: $h;
@@ -66,14 +68,17 @@
                 padding: 0 16px;
                 margin-right: 12px;
                 margin-top: 4px;
-                &.selected{
-                    background: darken($bg,50%);
+
+                &.selected {
+                    background: darken($bg, 50%);
                     color: white;
                 }
             }
         }
+
         > .new {
             padding-top: 16px;
+
             button {
                 background: transparent;
                 border: none;
