@@ -20,9 +20,9 @@ const store = new Vuex.Store({
         setCurrentTag(state, id: string) {
             state.currentTag = state.tagList.filter(t => t.id === id)[0];
         },
-        createRecord(state, record) {
+        createRecord(state, record) {//保存标签
             const record2: RecordItem = clone(record);
-            record2.createdAt = new Date();
+            record2.createdAt = new Date();//添加时间
             state.recordList.push(record2);
             store.commit('saveRecords');
 
@@ -43,11 +43,13 @@ const store = new Vuex.Store({
             const names = state.tagList.map(item => item.name);
             if (names.indexOf(name) >= 0) {
                 window.alert('标签名重复了');
+            }else {
+                const id = createId().toString();
+                state.tagList.push({id, name: name});
+                store.commit('saveTags');
+                window.alert('添加成功');
             }
-            const id = createId().toString();
-            state.tagList.push({id, name: name});
-            store.commit('saveTags');
-            window.alert('添加成功');
+
         },
         saveTags(state) {
             window.localStorage.setItem('tagList', JSON.stringify(state.tagList));

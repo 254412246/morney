@@ -34,7 +34,7 @@
         created() {
             const id = this.$route.params.id;
             this.$store.commit('fetchTags');
-            this.$store.commit('setCurrentTag', id);
+            this.$store.commit('setCurrentTag', id);//设置当前Tag
             if (!this.currentTag) {
                 this.$router.replace('/404');
             }
