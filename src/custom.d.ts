@@ -2,9 +2,10 @@ type RecordItem = {
     tags: string[];
     notes: string;
     type: string;
-    amount: number;
-    createdAt?: Date;
+    amount: number; // 数据类型 object | string
+    createdAt?: string;  // 类 / 构造函数
 }
+
 type Tag = {
     id: string;
     name: string;
@@ -16,4 +17,9 @@ type TagListModel = {
     update: (id: string, name: string) => 'success' | 'not found' | 'duplicated';
     remove: (id: string) => boolean;
     save: () => void;
+}
+type RootState = {
+    recordList: RecordItem[];
+    tagList: Tag[];
+    currentTag?: Tag;
 }
