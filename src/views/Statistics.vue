@@ -102,8 +102,6 @@
             }
             result.map(group => {
                 group.total = group.items.reduce((sum, item) => {
-                    // console.log(sum);
-                    // console.log(item);
                     return sum + item.amount;
                 }, 0);//初始值是0,结果是sum，每一项是item
             });
