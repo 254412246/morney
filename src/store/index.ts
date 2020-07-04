@@ -9,18 +9,21 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         recordList: [],
+        createRecordError: null,
+        createTagError:null,
         tagList: [],
         currentTag: undefined
-    } as RotState,
+    } as RootState,
     mutations: {
         setCurrentTag(state, id: string) {
             state.currentTag = state.tagList.filter(t => t.id === id)[0];
         },
-        createRecord(state, record) {//保存标签
-            const record2: RecordItem = clone(record);
+        createRecord(state, record: RecordItem) {//创建标签，保存标签
+            const record2 = clone(record);
             record2.createdAt = new Date().toISOString();//添加时间
             state.recordList.push(record2);
             store.commit('saveRecords');
+
 
         },
         saveRecords(state) {//保存数据
@@ -32,18 +35,27 @@ const store = new Vuex.Store({
                 JSON.parse(window.localStorage.getItem
                 ('recordList') || '[]') as RecordItem[];
         },
-        fetchTags(state) {
+        fetchTags(state) {//读取标签，相当于初始化
             state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+            if (!state.tagList || state.tagList.length === 0) {
+                store.commit('createTag', '衣');
+                store.commit('createTag', '食');
+                store.commit('createTag', '住');
+                store.commit('createTag', '行');
+                store.commit('createTag', '玩');
+            }
         },
-        createTag(state, name: string) {
+        createTag(state, name: string) {//创建记账页的标签
+            state.createTagError=null
             const names = state.tagList.map(item => item.name);
             if (names.indexOf(name) >= 0) {
-                window.alert('标签名重复了');
-            }else {
+                state.createTagError=new Error('tag name duplicated')
+                return
+            } else {
                 const id = createId().toString();
                 state.tagList.push({id, name: name});
                 store.commit('saveTags');
-                window.alert('添加成功');
+                state.createTagError=new Error('Tag creation successful')
             }
 
         },
